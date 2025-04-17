@@ -70,6 +70,11 @@ class AnalyticsClient {
   // Send tracking data to backend
   private async sendEvent(endpoint: string, data: any): Promise<void> {
     try {
+      // Make sure page is fully loaded and not in an error state 
+      if (typeof window === 'undefined' || !window.navigator.onLine) {
+        return;
+      }
+      
       const response = await fetch(`/api/analytics/${endpoint}`, {
         method: 'POST',
         headers: {
@@ -79,10 +84,11 @@ class AnalyticsClient {
       });
       
       if (!response.ok) {
-        console.error(`Error tracking ${endpoint}:`, await response.text());
+        console.warn(`Analytics: Error tracking ${endpoint}:`, await response.text());
       }
     } catch (error) {
-      console.error(`Error sending analytics event to ${endpoint}:`, error);
+      // Silently fail analytics (non-critical) to not break user experience
+      console.warn(`Analytics: Could not send ${endpoint} event`);
     }
   }
   
