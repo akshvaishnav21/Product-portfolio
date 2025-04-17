@@ -1,5 +1,13 @@
 import { LucideIcon } from "lucide-react";
-import { LinkedInIcon, GitHubIcon, FileIcon, PortfolioIcon, BlogIcon } from "@/assets/icons";
+import { 
+  LinkedInIcon, 
+  GitHubIcon, 
+  FileIcon, 
+  PortfolioIcon, 
+  BlogIcon, 
+  EnvelopeIcon, 
+  ChatbotIcon 
+} from "@/assets/icons";
 
 export interface LinkItem {
   title: string;
@@ -24,19 +32,19 @@ export const links: LinkItem[] = [
   {
     title: "Resume",
     description: "Download my CV (PDF)",
-    url: "https://github.com/akshvaishnav21",
+    url: "/assets/resume.pdf",
     icon: FileIcon
   },
   {
-    title: "Portfolio",
-    description: "View my detailed project portfolio",
-    url: "https://github.com/akshvaishnav21",
-    icon: PortfolioIcon
+    title: "Email",
+    description: "Get in touch with me directly",
+    url: "mailto:aakashvaishnav@gmail.com",
+    icon: EnvelopeIcon
   },
   {
-    title: "Blog",
-    description: "Read my articles on tech & development",
-    url: "https://github.com/akshvaishnav21",
-    icon: BlogIcon
+    title: "Chat with me",
+    description: "Try my AI-powered virtual assistant",
+    url: "#chat",
+    icon: ChatbotIcon
   }
 ];

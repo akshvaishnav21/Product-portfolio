@@ -1,5 +1,28 @@
 import { LucideProps } from "lucide-react";
 
+export function ChatbotIcon(props: LucideProps) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M12 2H2v10h10V2z" />
+      <path d="M5 8.5V4" />
+      <path d="M9 6.5V4" />
+      <path d="M12 7h4" />
+      <path d="M12 11h8" />
+      <path d="M16 15H8" />
+      <path d="M12 19H8" />
+    </svg>
+  );
+}
+
 export function LinkedInIcon(props: LucideProps) {
   return (
     <svg
