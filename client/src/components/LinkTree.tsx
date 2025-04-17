@@ -1,6 +1,7 @@
 import { LinkItem } from "@/data/links";
 import { ChevronRightIcon } from "lucide-react";
 import { useEffect, useRef } from "react";
+import { trackLinkClick } from "@/lib/analytics";
 
 interface LinkTreeProps {
   links: LinkItem[];
@@ -35,6 +36,7 @@ export default function LinkTree({ links }: LinkTreeProps) {
           href={link.url}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={() => trackLinkClick(link.title, link.url)}
           className="link-item block bg-white/80 backdrop-blur-sm rounded-xl shadow-lg p-5 flex items-center 
                      border border-white/30 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 
                      transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl

@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ChevronRight, ChevronLeft, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { trackProjectInteraction } from "@/lib/analytics";
 import habitTrackerImage from "../assets/images/habit-tracker.png";
 import stockInsightImage from "../assets/images/stockinsight-ai.png";
 
@@ -42,12 +43,16 @@ export default function ProjectCarousel({ projects, isDesktop }: ProjectCarousel
   const handleNext = () => {
     const nextIndex = (currentIndex + 1) % projects.length;
     navigateToSlide(nextIndex);
+    // Track interaction with analytics
+    trackProjectInteraction(projects[nextIndex].title, 'navigation');
   };
   
   // Handle previous button click
   const handlePrev = () => {
     const prevIndex = (currentIndex - 1 + projects.length) % projects.length;
     navigateToSlide(prevIndex);
+    // Track interaction with analytics
+    trackProjectInteraction(projects[prevIndex].title, 'navigation');
   };
   
   // Handle keyboard navigation
@@ -194,7 +199,13 @@ export default function ProjectCarousel({ projects, isDesktop }: ProjectCarousel
                   asChild 
                   className="bg-gradient-to-r from-blue-600 to-purple-600 text-white border-none hover:from-blue-700 hover:to-purple-700 shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105"
                 >
-                  <a href={project.url} target="_blank" rel="noopener noreferrer" className="flex items-center">
+                  <a 
+                    href={project.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="flex items-center"
+                    onClick={() => trackProjectInteraction(project.title, 'click')}
+                  >
                     View Project <ExternalLink className="ml-1.5 h-4 w-4" />
                   </a>
                 </Button>
