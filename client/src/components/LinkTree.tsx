@@ -41,7 +41,7 @@ export default function LinkTree({ links }: LinkTreeProps) {
                      focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
           style={{ transition: 'all 0.3s ease, opacity 0.5s ease, transform 0.5s ease' }}
         >
-          <div className="bg-gradient-to-br from-blue-400 to-purple-500 rounded-full p-3 mr-4 shadow-md">
+          <div className={`bg-gradient-to-br ${link.color || 'from-blue-400 to-purple-500'} rounded-full p-3 mr-4 shadow-md`}>
             <link.icon className="text-white h-5 w-5" />
           </div>
           <div>

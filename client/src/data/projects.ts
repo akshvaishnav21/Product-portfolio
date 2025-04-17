@@ -1,4 +1,4 @@
-import { LucideIcon, LayoutDashboard, CalendarCheck, Cloud, Sparkles, Braces, Database } from "lucide-react";
+import { LucideIcon, LayoutDashboard, CalendarCheck, Cloud, Sparkles, Braces, Database, Chrome } from "lucide-react";
 
 export interface Project {
   title: string;
@@ -9,6 +9,13 @@ export interface Project {
 }
 
 export const projects: Project[] = [
+  {
+    title: "Call Your AI - Chrome Extension",
+    description: "A Chrome extension that lets you access AI services directly from your address bar. Simply type @ followed by the service name and your query to quickly use ChatGPT, Claude, Gemini, Perplexity, or Copilot.",
+    technologies: ["JavaScript", "Chrome Extensions", "AI Integration"],
+    url: "https://github.com/akshvaishnav21/CallYourAI",
+    icon: Chrome
+  },
   {
     title: "Microsoft 365 Growth Platform",
     description: "Led subscription growth initiatives for Microsoft 365 and Copilot, implementing data-driven strategies to increase user acquisition and reduce churn.",
