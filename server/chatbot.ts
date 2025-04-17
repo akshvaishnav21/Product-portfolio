@@ -1,12 +1,14 @@
 import { Request, Response } from "express";
 
-// Get Azure OpenAI configuration from environment variables
-const AZURE_OPENAI_KEY = process.env.AZURE_OPENAI_KEY;
-const AZURE_OPENAI_ENDPOINT = process.env.AZURE_OPENAI_ENDPOINT;
+// Get Azure AI configuration from environment variables
+// Using AZURE_OPENAI_KEY and AZURE_OPENAI_ENDPOINT environment variables 
+// that were already set up
+const API_KEY = process.env.AZURE_OPENAI_KEY;
+const API_ENDPOINT = "https://ai-aakashvaishnav4597ai614307883805.services.ai.azure.com/models";
 
-// The deployment name and API version for your model in Azure AI
-const deploymentName = "o3-mini";
-const apiVersion = "2024-12-01-preview";
+// The model name and API version for Azure AI Foundry
+const MODEL_NAME = "DeepSeek-V3";
+const API_VERSION = "2024-05-01-preview";
 
 export async function handleChatRequest(req: Request, res: Response) {
   try {
@@ -16,8 +18,8 @@ export async function handleChatRequest(req: Request, res: Response) {
       return res.status(400).json({ error: "Messages are required and must be an array" });
     }
 
-    if (!AZURE_OPENAI_KEY || !AZURE_OPENAI_ENDPOINT) {
-      return res.status(500).json({ error: "Azure OpenAI API credentials are not configured" });
+    if (!API_KEY) {
+      return res.status(500).json({ error: "API key is not configured" });
     }
 
     // Add system message if not present
@@ -39,8 +41,8 @@ export async function handleChatRequest(req: Request, res: Response) {
       });
     }
 
-    // Construct the Azure OpenAI API URL
-    const apiUrl = `${AZURE_OPENAI_ENDPOINT}/openai/deployments/${deploymentName}/chat/completions?api-version=${apiVersion}`;
+    // Construct the Azure AI Foundry API URL for chat completions
+    const apiUrl = `${API_ENDPOINT}/chat/completions?api-version=${API_VERSION}`;
     console.log(`Sending request to: ${apiUrl}`);
     
     try {
@@ -48,32 +50,33 @@ export async function handleChatRequest(req: Request, res: Response) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "api-key": AZURE_OPENAI_KEY,
+          "api-key": API_KEY,
         },
         body: JSON.stringify({
           messages: chatMessages,
           max_tokens: 800,
-          temperature: 0.7
+          temperature: 0.7,
+          model: MODEL_NAME
         }),
       });
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error("Azure OpenAI API error:", errorText);
+        console.error("Azure AI Foundry API error:", errorText);
         return res.status(response.status).json({ 
-          error: "Error communicating with Azure OpenAI API", 
+          error: "Error communicating with Azure AI Foundry API", 
           details: errorText 
         });
       }
 
       const data = await response.json();
-      console.log("Received response from Azure OpenAI");
+      console.log("Received response from Azure AI Foundry");
       
       return res.json(data);
     } catch (apiError: any) {
-      console.error("Azure OpenAI API error:", apiError.message || apiError);
+      console.error("Azure AI Foundry API error:", apiError.message || apiError);
       return res.status(500).json({ 
-        error: "Error communicating with Azure OpenAI API", 
+        error: "Error communicating with Azure AI Foundry API", 
         details: apiError.message || "Unknown error"
       });
     }
