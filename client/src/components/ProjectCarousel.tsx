@@ -5,6 +5,7 @@ import { ChevronRight, ChevronLeft, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import habitTrackerImage from "../assets/images/habit-tracker.png";
+import stockInsightImage from "../assets/images/stockinsight-ai.png";
 
 interface ProjectCarouselProps {
   projects: Project[];
@@ -142,6 +143,15 @@ export default function ProjectCarousel({ projects, isDesktop }: ProjectCarousel
                     ></iframe>
                   </div>
                 ) : index === 1 ? (
+                  // StockInsight AI screenshot
+                  <div className="w-full h-[250px]">
+                    <img 
+                      src={stockInsightImage} 
+                      alt="StockInsight AI Screenshot" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ) : index === 2 ? (
                   // Habit Tracker screenshot
                   <div className="w-full h-[250px]">
                     <img 

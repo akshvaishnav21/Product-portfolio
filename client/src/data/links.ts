@@ -1,4 +1,4 @@
-import { LucideIcon, Mail, FileText, Linkedin, Github, BookOpen } from "lucide-react";
+import { LucideIcon, Mail, Linkedin, Github, BookOpen } from "lucide-react";
 
 export interface LinkItem {
   title: string;
@@ -22,13 +22,6 @@ export const links: LinkItem[] = [
     url: "https://github.com/akshvaishnav21",
     icon: Github,
     color: "from-gray-700 to-gray-900"
-  },
-  {
-    title: "Resume",
-    description: "Download my CV (PDF)",
-    url: "/assets/resume.pdf",
-    icon: FileText,
-    color: "from-red-500 to-red-700"
   },
   {
     title: "Email",

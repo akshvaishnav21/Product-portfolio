@@ -1,4 +1,4 @@
-import { LucideIcon, Chrome, CalendarCheck } from "lucide-react";
+import { LucideIcon, Chrome, CalendarCheck, LineChart } from "lucide-react";
 
 export interface Project {
   title: string;
@@ -15,6 +15,13 @@ export const projects: Project[] = [
     technologies: ["JavaScript", "Chrome Extensions", "AI Integration"],
     url: "https://github.com/akshvaishnav21/CallYourAI",
     icon: Chrome
+  },
+  {
+    title: "StockInsight AI",
+    description: "A real-time stock analysis dashboard with AI-powered insights, technical analysis, and financial data visualization. Features include price tracking, financial metrics, news sentiment analysis, insider trading monitoring, and institutional ownership tracking.",
+    technologies: ["React", "TypeScript", "Express.js", "MarketStack API", "Tailwind CSS"],
+    url: "https://stock-insight-ai-akshvaishnav219.replit.app/",
+    icon: LineChart
   },
   {
     title: "Habit Tracker",
