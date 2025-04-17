@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ChevronRight, ChevronLeft, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import habitTrackerImage from "../assets/images/habit-tracker.png";
 
 interface ProjectCarouselProps {
   projects: Project[];
@@ -128,19 +129,42 @@ export default function ProjectCarousel({ projects, isDesktop }: ProjectCarousel
             }`}
           >
             <Card className="project-card w-full h-full bg-white/70 rounded-xl overflow-hidden border border-white/40 shadow-lg flex flex-col">
-              <div className="h-48 bg-gradient-to-br from-blue-600 to-purple-600 relative overflow-hidden">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.1),transparent_70%)]"></div>
-                <div className="flex items-center justify-center h-full relative">
-                  {/* Animated background elements */}
-                  <div className="absolute w-24 h-24 rounded-full bg-white/10 top-6 left-6 blur-md animate-float-slow"></div>
-                  <div className="absolute w-16 h-16 rounded-full bg-white/10 bottom-4 right-10 blur-md animate-float"></div>
-                  
-                  {/* Project icon with glow */}
-                  <div className="relative">
-                    <div className="absolute inset-0 bg-white/20 blur-lg rounded-full"></div>
-                    <project.icon className="h-24 w-24 text-white relative z-10" />
+              <div className="bg-gradient-to-br from-blue-600 to-purple-600 relative overflow-hidden">
+                {index === 0 ? (
+                  // YouTube embed for Call Your AI
+                  <div className="w-full aspect-video">
+                    <iframe
+                      className="w-full h-full"
+                      src="https://www.youtube.com/embed/nAclGbekAYU"
+                      title="Call Your AI Demo"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    ></iframe>
                   </div>
-                </div>
+                ) : index === 1 ? (
+                  // Habit Tracker screenshot
+                  <div className="w-full h-[250px]">
+                    <img 
+                      src={habitTrackerImage} 
+                      alt="Habit Tracker Screenshot" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ) : (
+                  // Fallback for any other projects
+                  <div className="h-48 flex items-center justify-center relative">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.1),transparent_70%)]"></div>
+                    {/* Animated background elements */}
+                    <div className="absolute w-24 h-24 rounded-full bg-white/10 top-6 left-6 blur-md animate-float-slow"></div>
+                    <div className="absolute w-16 h-16 rounded-full bg-white/10 bottom-4 right-10 blur-md animate-float"></div>
+                    
+                    {/* Project icon with glow */}
+                    <div className="relative">
+                      <div className="absolute inset-0 bg-white/20 blur-lg rounded-full"></div>
+                      <project.icon className="h-24 w-24 text-white relative z-10" />
+                    </div>
+                  </div>
+                )}
               </div>
               <CardContent className="p-6 flex-grow">
                 <h3 className="font-heading font-semibold text-xl mb-2 text-gray-800">{project.title}</h3>
