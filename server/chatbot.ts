@@ -5,7 +5,7 @@ const AZURE_OPENAI_ENDPOINT = process.env.AZURE_OPENAI_ENDPOINT;
 
 // These values can be obtained from your Azure OpenAI resource in the Azure portal
 // The deployment name you chose when you deployed the model
-const deploymentName = "gpt-35-turbo"; // Change this to your actual deployment name
+const deploymentName = "o3-mini"; // Updated to the correct deployment name
 
 export async function handleChatRequest(req: Request, res: Response) {
   try {
@@ -37,7 +37,10 @@ export async function handleChatRequest(req: Request, res: Response) {
       });
     }
 
-    const response = await fetch(`${AZURE_OPENAI_ENDPOINT}/openai/deployments/${deploymentName}/chat/completions?api-version=2023-05-15`, {
+    // Log the request URL for debugging
+    console.log(`Sending request to: ${AZURE_OPENAI_ENDPOINT}/openai/deployments/${deploymentName}/chat/completions?api-version=2023-12-01-preview`);
+    
+    const response = await fetch(`${AZURE_OPENAI_ENDPOINT}/openai/deployments/${deploymentName}/chat/completions?api-version=2023-12-01-preview`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -47,6 +50,7 @@ export async function handleChatRequest(req: Request, res: Response) {
         messages,
         max_tokens: 800,
         temperature: 0.7,
+        model: "o3-mini"
       }),
     });
 

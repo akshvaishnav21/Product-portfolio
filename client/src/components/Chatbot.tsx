@@ -78,10 +78,10 @@ export default function Chatbot() {
       {/* Floating chat button */}
       <Button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 rounded-full w-14 h-14 p-0 shadow-lg bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-all duration-300 animate-float z-50"
+        className="fixed bottom-6 right-6 rounded-full w-16 h-16 p-0 shadow-xl bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-all duration-300 animate-float z-[9999]"
         aria-label="Open Chat"
       >
-        <MessageSquare className="h-6 w-6 text-white" />
+        <MessageSquare className="h-7 w-7 text-white" />
       </Button>
 
       {/* Chat dialog */}
