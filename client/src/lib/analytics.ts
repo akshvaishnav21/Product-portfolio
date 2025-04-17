@@ -44,41 +44,81 @@ class AnalyticsClient {
   public init(): void {
     if (this.initialized) return;
     
-    // Track initial page view on load
-    this.trackPageView(window.location.pathname);
-    
-    // Set up custom event listeners
-    this.setupEventListeners();
-    
-    this.initialized = true;
+    try {
+      // Check if running in browser context
+      if (typeof window === 'undefined' || !window.document) {
+        return;
+      }
+      
+      // Setup event listeners first
+      this.setupEventListeners();
+      
+      // Track initial page view on load with a delay to ensure app is ready
+      setTimeout(() => {
+        this.trackPageView(window.location.pathname);
+      }, 500);
+      
+      this.initialized = true;
+    } catch (error) {
+      // Silent fail for analytics initialization
+      console.warn("Analytics initialization could not complete");
+    }
   }
   
   // Set up global event listeners
   private setupEventListeners(): void {
-    // Track navigation events
-    window.addEventListener('popstate', () => {
-      this.trackPageView(window.location.pathname);
-    });
-    
-    // Monitor link clicks (delegation)
-    document.addEventListener('click', (event) => {
-      const target = event.target as HTMLElement;
-      const linkElement = target.closest('a');
-      
-      if (linkElement && !linkElement.getAttribute('data-analytics-ignore')) {
-        const linkUrl = linkElement.href;
-        const linkName = linkElement.innerText || linkElement.getAttribute('aria-label') || 'Unknown';
-        
-        // Don't track navigation clicks that are handled by track manually in components
-        if (!linkUrl.startsWith('#') && !linkUrl.startsWith('javascript:')) {
-          this.trackLinkClick(linkName, linkUrl);
-        }
+    try {
+      // Check if running in browser context
+      if (typeof window === 'undefined' || !window.document) {
+        return;
       }
-    });
+      
+      // Track navigation events
+      window.addEventListener('popstate', () => {
+        try {
+          this.trackPageView(window.location.pathname);
+        } catch (error) {
+          // Silent fail
+        }
+      });
+      
+      // Monitor link clicks (delegation)
+      document.addEventListener('click', (event) => {
+        try {
+          const target = event.target as HTMLElement;
+          const linkElement = target.closest('a');
+          
+          if (linkElement && !linkElement.getAttribute('data-analytics-ignore')) {
+            const linkUrl = linkElement.href;
+            const linkName = linkElement.innerText || linkElement.getAttribute('aria-label') || 'Unknown';
+            
+            // Don't track navigation clicks that are handled by track manually in components
+            if (!linkUrl.startsWith('#') && !linkUrl.startsWith('javascript:')) {
+              this.trackLinkClick(linkName, linkUrl);
+            }
+          }
+        } catch (error) {
+          // Silent fail for click tracking
+        }
+      });
+    } catch (error) {
+      // Silent fail for event listeners setup
+      console.warn("Could not set up analytics event listeners");
+    }
   }
   
   // Send tracking data to backend
-  private async sendEvent(endpoint: string, data: any): Promise<void> {
+  private sendEvent(endpoint: string, data: any): void {
+    // Wrap in timeout to avoid unhandledrejection in React
+    setTimeout(() => {
+      this.sendEventAsync(endpoint, data).catch(() => {
+        // Explicitly catch to prevent any unhandled rejection
+      });
+    }, 0);
+  }
+  
+  // Async implementation with proper error handling
+  private async sendEventAsync(endpoint: string, data: any): Promise<void> {
     try {
       // Make sure page is fully loaded and not in an error state 
       if (typeof window === 'undefined' || !window.navigator.onLine) {
@@ -94,7 +134,7 @@ class AnalyticsClient {
       });
       
       if (!response.ok) {
-        console.warn(`Analytics: Error tracking ${endpoint}:`, await response.text());
+        console.warn(`Analytics: Error tracking ${endpoint}`);
       }
     } catch (error) {
       // Silently fail analytics (non-critical) to not break user experience
