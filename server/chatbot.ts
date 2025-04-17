@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
 
+// Get Azure OpenAI configuration from environment variables
 const AZURE_OPENAI_KEY = process.env.AZURE_OPENAI_KEY;
 const AZURE_OPENAI_ENDPOINT = process.env.AZURE_OPENAI_ENDPOINT;
 
-// These values can be obtained from your Azure OpenAI resource in the Azure portal
-// The deployment name you chose when you deployed the model
-const deploymentName = "o3-mini"; // Updated to the correct deployment name
+// The deployment name and API version for your model in Azure AI
+const deploymentName = "o3-mini";
+const apiVersion = "2024-12-01-preview";
 
 export async function handleChatRequest(req: Request, res: Response) {
   try {
@@ -20,8 +21,9 @@ export async function handleChatRequest(req: Request, res: Response) {
     }
 
     // Add system message if not present
-    if (!messages.some((msg: any) => msg.role === "system")) {
-      messages.unshift({
+    const chatMessages = [...messages];
+    if (!chatMessages.some((msg: any) => msg.role === "system")) {
+      chatMessages.unshift({
         role: "system",
         content: `You are a helpful assistant for Aakash Vaishnav, a Product Manager at Microsoft. 
         Your purpose is to help visitors of Aakash's portfolio website learn more about him.
@@ -37,36 +39,46 @@ export async function handleChatRequest(req: Request, res: Response) {
       });
     }
 
-    // Log the request URL for debugging
-    console.log(`Sending request to: ${AZURE_OPENAI_ENDPOINT}/openai/deployments/${deploymentName}/chat/completions?api-version=2023-12-01-preview`);
+    // Construct the Azure OpenAI API URL
+    const apiUrl = `${AZURE_OPENAI_ENDPOINT}/openai/deployments/${deploymentName}/chat/completions?api-version=${apiVersion}`;
+    console.log(`Sending request to: ${apiUrl}`);
     
-    const response = await fetch(`${AZURE_OPENAI_ENDPOINT}/openai/deployments/${deploymentName}/chat/completions?api-version=2023-12-01-preview`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "api-key": AZURE_OPENAI_KEY,
-      },
-      body: JSON.stringify({
-        messages,
-        max_tokens: 800,
-        temperature: 0.7,
-        model: "o3-mini"
-      }),
-    });
+    try {
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "api-key": AZURE_OPENAI_KEY,
+        },
+        body: JSON.stringify({
+          messages: chatMessages,
+          max_tokens: 800,
+          temperature: 0.7
+        }),
+      });
 
-    if (!response.ok) {
-      const errorData = await response.text();
-      console.error("Azure OpenAI API error:", errorData);
-      return res.status(response.status).json({ 
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Azure OpenAI API error:", errorText);
+        return res.status(response.status).json({ 
+          error: "Error communicating with Azure OpenAI API", 
+          details: errorText 
+        });
+      }
+
+      const data = await response.json();
+      console.log("Received response from Azure OpenAI");
+      
+      return res.json(data);
+    } catch (apiError: any) {
+      console.error("Azure OpenAI API error:", apiError.message || apiError);
+      return res.status(500).json({ 
         error: "Error communicating with Azure OpenAI API", 
-        details: errorData 
+        details: apiError.message || "Unknown error"
       });
     }
-
-    const data = await response.json();
-    return res.json(data);
-  } catch (error) {
-    console.error("Error in chat request:", error);
+  } catch (error: any) {
+    console.error("Error in chat request:", error.message || error);
     return res.status(500).json({ error: "Internal server error" });
   }
 }
