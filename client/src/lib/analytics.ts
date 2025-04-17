@@ -1,15 +1,25 @@
 import { v4 as uuidv4 } from 'uuid';
 
-// Get or create visitor ID
+// Get or create visitor ID safely
 const getVisitorId = (): string => {
-  let visitorId = localStorage.getItem('portfolio_visitor_id');
-  
-  if (!visitorId) {
-    visitorId = uuidv4();
-    localStorage.setItem('portfolio_visitor_id', visitorId);
+  try {
+    // Check if localStorage is available (SSR safe)
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return 'visitor-ssr';
+    }
+    
+    let visitorId = localStorage.getItem('portfolio_visitor_id');
+    
+    if (!visitorId) {
+      visitorId = uuidv4();
+      localStorage.setItem('portfolio_visitor_id', visitorId);
+    }
+    
+    return visitorId;
+  } catch (error) {
+    // Safe fallback if localStorage is disabled or errors
+    return 'visitor-fallback';
   }
-  
-  return visitorId;
 };
 
 // Base analytics class
@@ -94,41 +104,66 @@ class AnalyticsClient {
   
   // Track page view
   public trackPageView(pagePath: string): void {
-    const referrer = document.referrer;
-    this.sendEvent('pageview', {
-      visitorId: this.visitorId,
-      pagePath,
-      referrer
-    });
+    // Ensure this is being called in the browser context
+    if (typeof window === 'undefined') return;
+    
+    try {
+      const referrer = document.referrer;
+      this.sendEvent('pageview', {
+        visitorId: this.visitorId,
+        pagePath,
+        referrer
+      });
+    } catch (error) {
+      // Silent fail for analytics
+    }
   }
   
   // Track link click
   public trackLinkClick(linkName: string, linkUrl: string): void {
-    this.sendEvent('linkclick', {
-      visitorId: this.visitorId,
-      linkName,
-      linkUrl,
-      pagePath: window.location.pathname
-    });
+    if (typeof window === 'undefined') return;
+    
+    try {
+      this.sendEvent('linkclick', {
+        visitorId: this.visitorId,
+        linkName,
+        linkUrl,
+        pagePath: window.location.pathname
+      });
+    } catch (error) {
+      // Silent fail for analytics
+    }
   }
   
   // Track project interaction
   public trackProjectInteraction(projectName: string, interactionType: string): void {
-    this.sendEvent('project', {
-      visitorId: this.visitorId,
-      projectName,
-      interactionType,
-      pagePath: window.location.pathname
-    });
+    if (typeof window === 'undefined') return;
+    
+    try {
+      this.sendEvent('project', {
+        visitorId: this.visitorId,
+        projectName,
+        interactionType,
+        pagePath: window.location.pathname
+      });
+    } catch (error) {
+      // Silent fail for analytics
+    }
   }
   
   // Track chatbot interaction
   public trackChatbotInteraction(questionType: string, questionCount: number): void {
-    this.sendEvent('chatbot', {
-      visitorId: this.visitorId,
-      questionType,
-      questionCount
-    });
+    if (typeof window === 'undefined') return;
+    
+    try {
+      this.sendEvent('chatbot', {
+        visitorId: this.visitorId,
+        questionType,
+        questionCount
+      });
+    } catch (error) {
+      // Silent fail for analytics
+    }
   }
   
   // Track custom event
@@ -139,15 +174,21 @@ class AnalyticsClient {
     eventLabel?: string,
     additionalData?: Record<string, any>
   ): void {
-    this.sendEvent('event', {
-      eventType,
-      eventCategory,
-      eventAction,
-      eventLabel,
-      visitorId: this.visitorId,
-      pagePath: window.location.pathname,
-      additionalData
-    });
+    if (typeof window === 'undefined') return;
+    
+    try {
+      this.sendEvent('event', {
+        eventType,
+        eventCategory,
+        eventAction,
+        eventLabel,
+        visitorId: this.visitorId,
+        pagePath: window.location.pathname,
+        additionalData
+      });
+    } catch (error) {
+      // Silent fail for analytics
+    }
   }
 }
 
