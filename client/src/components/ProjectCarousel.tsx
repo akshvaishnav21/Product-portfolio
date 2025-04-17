@@ -18,11 +18,24 @@ export default function ProjectCarousel({ projects, isDesktop }: ProjectCarousel
   
   const navigateToSlide = (index: number) => {
     setCurrentIndex(index);
+    
+    // Manually create and position the slides instead of using scrollTo
     if (carouselRef.current) {
-      const slideWidth = carouselRef.current.offsetWidth;
-      carouselRef.current.scrollTo({
-        left: index * slideWidth,
-        behavior: 'smooth'
+      const cards = Array.from(carouselRef.current.querySelectorAll('.project-card'));
+      cards.forEach((card, i) => {
+        const element = card as HTMLElement;
+        if (i === index) {
+          element.style.transform = 'scale(1)';
+          element.style.opacity = '1';
+          element.style.position = 'relative';
+          element.style.left = '0';
+          element.style.display = 'flex';
+        } else {
+          element.style.position = 'absolute';
+          element.style.opacity = '0';
+          element.style.transform = 'scale(0.95)';
+          element.style.left = i < index ? '-100%' : '100%';
+        }
       });
     }
     
@@ -59,6 +72,12 @@ export default function ProjectCarousel({ projects, isDesktop }: ProjectCarousel
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [currentIndex]);
+
+  // Initialize card positions when component mounts
+  useEffect(() => {
+    // Set initial positions
+    navigateToSlide(currentIndex);
+  }, []);
 
   // Handle auto-scrolling
   useEffect(() => {
@@ -116,7 +135,7 @@ export default function ProjectCarousel({ projects, isDesktop }: ProjectCarousel
           {projects.map((project, index) => (
             <Card 
               key={index} 
-              className={`snap-start min-w-full bg-white/70 rounded-xl overflow-hidden border border-white/40 shadow-lg flex flex-col transition-all duration-500 transform ${
+              className={`project-card snap-start min-w-full bg-white/70 rounded-xl overflow-hidden border border-white/40 shadow-lg flex flex-col transition-all duration-500 transform ${
                 currentIndex === index ? "scale-100 opacity-100" : "scale-95 opacity-70"
               }`}
             >
