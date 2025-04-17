@@ -1,13 +1,4 @@
-import { LucideIcon } from "lucide-react";
-import { 
-  LinkedInIcon, 
-  GitHubIcon, 
-  FileIcon, 
-  PortfolioIcon, 
-  BlogIcon, 
-  EnvelopeIcon, 
-  ChatbotIcon 
-} from "@/assets/icons";
+import { LucideIcon, Mail, FileText, MessageSquare, Linkedin, Github } from "lucide-react";
 
 export interface LinkItem {
   title: string;
@@ -21,30 +12,30 @@ export const links: LinkItem[] = [
     title: "LinkedIn",
     description: "Connect with me professionally",
     url: "https://www.linkedin.com/in/aakashvaishnav1/",
-    icon: LinkedInIcon
+    icon: Linkedin
   },
   {
     title: "GitHub",
     description: "Check out my code repositories",
     url: "https://github.com/akshvaishnav21",
-    icon: GitHubIcon
+    icon: Github
   },
   {
     title: "Resume",
     description: "Download my CV (PDF)",
     url: "/assets/resume.pdf",
-    icon: FileIcon
+    icon: FileText
   },
   {
     title: "Email",
     description: "Get in touch with me directly",
     url: "mailto:aakashvaishnav@gmail.com",
-    icon: EnvelopeIcon
+    icon: Mail
   },
   {
     title: "Chat with me",
     description: "Try my AI-powered virtual assistant",
     url: "#chat",
-    icon: ChatbotIcon
+    icon: MessageSquare
   }
 ];

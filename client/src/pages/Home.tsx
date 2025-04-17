@@ -1,6 +1,7 @@
 import ProfileCard from "@/components/ProfileCard";
 import LinkTree from "@/components/LinkTree";
 import ProjectCarousel from "@/components/ProjectCarousel";
+import Chatbot from "@/components/Chatbot";
 import { links } from "@/data/links";
 import { projects } from "@/data/projects";
 
@@ -38,6 +39,9 @@ export default function Home() {
           <p>&copy; {new Date().getFullYear()} Aakash Vaishnav. All rights reserved.</p>
         </div>
       </footer>
+
+      {/* Floating Chatbot */}
+      <Chatbot />
     </div>
   );
 }
