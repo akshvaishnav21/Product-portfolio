@@ -1,4 +1,4 @@
-import { LucideIcon, LayoutDashboard, CalendarCheck, Cloud, Activity } from "lucide-react";
+import { LucideIcon, LayoutDashboard, CalendarCheck, Cloud, Sparkles, Braces, Database } from "lucide-react";
 
 export interface Project {
   title: string;
@@ -10,31 +10,31 @@ export interface Project {
 
 export const projects: Project[] = [
   {
-    title: "E-commerce Dashboard",
-    description: "A comprehensive dashboard for managing online sales, inventory, and customer data with real-time analytics.",
-    technologies: ["React", "Redux", "Tailwind"],
+    title: "Microsoft 365 Growth Platform",
+    description: "Led subscription growth initiatives for Microsoft 365 and Copilot, implementing data-driven strategies to increase user acquisition and reduce churn.",
+    technologies: ["Data Analytics", "Growth Strategy", "A/B Testing"],
+    url: "https://github.com/akshvaishnav21",
+    icon: Sparkles
+  },
+  {
+    title: "Microsoft Shopping Platform",
+    description: "Developed the product strategy for Microsoft Shopping on Bing and Edge, significantly boosting revenue through strategic ad integration and user engagement.",
+    technologies: ["Product Strategy", "User Research", "Revenue Growth"],
     url: "https://github.com/akshvaishnav21",
     icon: LayoutDashboard
   },
   {
-    title: "Task Manager App",
-    description: "A collaborative task management application with drag-and-drop functionality, reminders, and team assignments.",
-    technologies: ["Vue.js", "Firebase", "Vuetify"],
+    title: "AI-Powered Comparison Tool",
+    description: "Led the development of AI-powered smart comparison features in Microsoft Copilot, enhancing user experience with intelligent product recommendations.",
+    technologies: ["AI Integration", "UX Design", "Product Development"],
     url: "https://github.com/akshvaishnav21",
-    icon: CalendarCheck
+    icon: Braces
   },
   {
-    title: "Weather Forecast App",
-    description: "A beautiful weather application featuring 5-day forecasts, location-based services, and weather alerts.",
-    technologies: ["JavaScript", "API", "Chart.js"],
+    title: "Data Analytics Dashboard",
+    description: "Created comprehensive analytics dashboards tracking key performance metrics for subscription services, enabling data-driven decision making across teams.",
+    technologies: ["Power BI", "SQL", "Data Visualization"],
     url: "https://github.com/akshvaishnav21",
-    icon: Cloud
-  },
-  {
-    title: "Fitness Tracker",
-    description: "An activity tracking application that monitors workouts, nutrition, and progress with personalized recommendations.",
-    technologies: ["React Native", "Node.js", "MongoDB"],
-    url: "https://github.com/akshvaishnav21",
-    icon: Activity
+    icon: Database
   }
 ];

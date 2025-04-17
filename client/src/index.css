@@ -8,6 +8,72 @@
   }
 
   body {
-    @apply font-sans antialiased bg-background text-foreground;
+    @apply font-sans antialiased text-foreground;
+    background: linear-gradient(to bottom right, #f0f4ff, #e6eeff, #f0f0ff, #f5f0ff);
+    min-height: 100vh;
   }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+  }
+}
+
+/* Animations */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes float-slow {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: float-slow 8s ease-in-out infinite;
+}
+
+/* Background blob animation */
+@keyframes blob-move {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(5%, 5%) scale(1.1); }
+  50% { transform: translate(0, 10%) scale(0.9); }
+  75% { transform: translate(-5%, 5%) scale(1.05); }
+}
+
+.animate-blob {
+  animation: blob-move 15s ease-in-out infinite;
+}
+
+.animate-blob-slow {
+  animation: blob-move 25s ease-in-out infinite;
+}
+
+.animate-blob-delayed {
+  animation: blob-move 18s ease-in-out 2s infinite;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.font-heading {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+}
+
+.font-sans {
+  font-family: 'Roboto', sans-serif;
 }
