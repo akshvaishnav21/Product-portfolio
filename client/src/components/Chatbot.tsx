@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { MessageSquare, AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { trackChatbotInteraction } from "@/lib/analytics";
 
 interface Message {
   role: 'user' | 'assistant' | 'system';
@@ -46,6 +47,10 @@ export default function Chatbot() {
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
+    
+    // Track chatbot interaction
+    const questionsAsked = sessionInfo ? 3 - sessionInfo.questionsRemaining + 1 : 1;
+    trackChatbotInteraction('question', questionsAsked);
 
     try {
       const headers: Record<string, string> = {
@@ -113,7 +118,10 @@ export default function Chatbot() {
     <>
       {/* Floating chat button */}
       <Button
-        onClick={() => setIsOpen(true)}
+        onClick={() => {
+          setIsOpen(true);
+          trackChatbotInteraction('open', 0);
+        }}
         className="fixed bottom-6 right-6 rounded-full w-16 h-16 p-0 shadow-xl bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-all duration-300 animate-float z-[9999]"
         aria-label="Open Chat"
       >
@@ -121,7 +129,14 @@ export default function Chatbot() {
       </Button>
 
       {/* Chat dialog */}
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <Dialog 
+        open={isOpen} 
+        onOpenChange={(open) => {
+          setIsOpen(open);
+          if (!open) {
+            trackChatbotInteraction('close', sessionInfo?.questionsRemaining || 3);
+          }
+        }}>
         <DialogContent className="sm:max-w-[425px] rounded-xl bg-white border border-blue-100 shadow-lg">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
