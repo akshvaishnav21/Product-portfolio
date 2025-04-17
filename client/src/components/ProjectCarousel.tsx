@@ -16,28 +16,13 @@ export default function ProjectCarousel({ projects, isDesktop }: ProjectCarousel
   const autoPlayTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
   
+  // Direct slide navigation function
   const navigateToSlide = (index: number) => {
-    setCurrentIndex(index);
+    // Ensure the index is within bounds
+    const safeIndex = ((index % projects.length) + projects.length) % projects.length;
     
-    // Manually create and position the slides instead of using scrollTo
-    if (carouselRef.current) {
-      const cards = Array.from(carouselRef.current.querySelectorAll('.project-card'));
-      cards.forEach((card, i) => {
-        const element = card as HTMLElement;
-        if (i === index) {
-          element.style.transform = 'scale(1)';
-          element.style.opacity = '1';
-          element.style.position = 'relative';
-          element.style.left = '0';
-          element.style.display = 'flex';
-        } else {
-          element.style.position = 'absolute';
-          element.style.opacity = '0';
-          element.style.transform = 'scale(0.95)';
-          element.style.left = i < index ? '-100%' : '100%';
-        }
-      });
-    }
+    // Update state
+    setCurrentIndex(safeIndex);
     
     // Pause autoplay temporarily when user navigates manually
     setAutoPlay(false);
@@ -51,12 +36,16 @@ export default function ProjectCarousel({ projects, isDesktop }: ProjectCarousel
     }, 10000);
   };
   
+  // Handle next button click
   const handleNext = () => {
-    navigateToSlide((currentIndex + 1) % projects.length);
+    const nextIndex = (currentIndex + 1) % projects.length;
+    navigateToSlide(nextIndex);
   };
   
+  // Handle previous button click
   const handlePrev = () => {
-    navigateToSlide((currentIndex - 1 + projects.length) % projects.length);
+    const prevIndex = (currentIndex - 1 + projects.length) % projects.length;
+    navigateToSlide(prevIndex);
   };
   
   // Handle keyboard navigation
@@ -108,37 +97,37 @@ export default function ProjectCarousel({ projects, isDesktop }: ProjectCarousel
             onClick={handlePrev} 
             variant="outline" 
             size="icon" 
-            className="h-9 w-9 rounded-full border border-blue-200 hover:bg-gradient-to-r hover:from-blue-100 hover:to-purple-100 transition-all duration-300"
+            className="h-10 w-10 rounded-full border-2 border-blue-300 hover:bg-gradient-to-r hover:from-blue-100 hover:to-purple-100 hover:border-blue-400 transition-all duration-300 cursor-pointer z-10"
             aria-label="Previous project"
           >
-            <ChevronLeft className="h-4 w-4 text-blue-600" />
+            <ChevronLeft className="h-5 w-5 text-blue-600" />
           </Button>
           <Button 
             onClick={handleNext} 
             variant="outline" 
             size="icon" 
-            className="h-9 w-9 rounded-full border border-blue-200 hover:bg-gradient-to-r hover:from-blue-100 hover:to-purple-100 transition-all duration-300"
+            className="h-10 w-10 rounded-full border-2 border-blue-300 hover:bg-gradient-to-r hover:from-blue-100 hover:to-purple-100 hover:border-blue-400 transition-all duration-300 cursor-pointer z-10"
             aria-label="Next project"
           >
-            <ChevronRight className="h-4 w-4 text-blue-600" />
+            <ChevronRight className="h-5 w-5 text-blue-600" />
           </Button>
         </div>
       </div>
       
       {/* Carousel Container */}
-      <div className="relative overflow-hidden rounded-xl">
-        <div 
-          ref={carouselRef}
-          className="flex gap-4 snap-x snap-mandatory overflow-x-hidden pb-4 scrollbar-hide"
-          style={{ scrollbarWidth: 'none' }}
-        >
-          {projects.map((project, index) => (
-            <Card 
-              key={index} 
-              className={`project-card snap-start min-w-full bg-white/70 rounded-xl overflow-hidden border border-white/40 shadow-lg flex flex-col transition-all duration-500 transform ${
-                currentIndex === index ? "scale-100 opacity-100" : "scale-95 opacity-70"
-              }`}
-            >
+      <div className="relative overflow-hidden rounded-xl min-h-[600px]">
+        {projects.map((project, index) => (
+          <div 
+            key={index}
+            className={`absolute inset-0 transition-all duration-500 transform ${
+              currentIndex === index 
+                ? "opacity-100 translate-x-0" 
+                : index < currentIndex 
+                  ? "opacity-0 -translate-x-full" 
+                  : "opacity-0 translate-x-full"
+            }`}
+          >
+            <Card className="project-card w-full h-full bg-white/70 rounded-xl overflow-hidden border border-white/40 shadow-lg flex flex-col">
               <div className="h-48 bg-gradient-to-br from-blue-600 to-purple-600 relative overflow-hidden">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.1),transparent_70%)]"></div>
                 <div className="flex items-center justify-center h-full relative">
@@ -177,8 +166,8 @@ export default function ProjectCarousel({ projects, isDesktop }: ProjectCarousel
                 </Button>
               </CardContent>
             </Card>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
       
       {/* Dots Navigation */}
