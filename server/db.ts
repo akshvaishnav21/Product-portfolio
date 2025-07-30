@@ -2,14 +2,19 @@ import { Pool } from 'pg';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import * as schema from "@shared/schema";
 
-if (!process.env.DATABASE_URL) {
+// Construct connection string from individual environment variables
+// This is more reliable in Replit environment
+const connectionString = process.env.DATABASE_URL || 
+  `postgresql://${process.env.PGUSER}:${process.env.PGPASSWORD}@${process.env.PGHOST}:${process.env.PGPORT}/${process.env.PGDATABASE}`;
+
+if (!connectionString || connectionString === 'postgresql://undefined:undefined@undefined:undefined/undefined') {
   throw new Error(
-    "DATABASE_URL must be set. Did you forget to provision a database?",
+    "Database connection variables must be set. Did you forget to provision a database?",
   );
 }
 
 export const pool = new Pool({ 
-  connectionString: process.env.DATABASE_URL,
+  connectionString,
   ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
 
