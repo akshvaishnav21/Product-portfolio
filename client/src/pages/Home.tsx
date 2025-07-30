@@ -2,16 +2,15 @@ import ProfileCard from "@/components/ProfileCard";
 import LinkTree from "@/components/LinkTree";
 import ProjectCarousel from "@/components/ProjectCarousel";
 import Chatbot from "@/components/Chatbot";
+import AnimatedBackground from "@/components/AnimatedBackground";
 import { links } from "@/data/links";
 import { projects } from "@/data/projects";
 
 export default function Home() {
   return (
     <div className="min-h-screen font-sans text-foreground relative overflow-hidden">
-      {/* Background animation blobs */}
-      <div className="absolute top-[-300px] right-[-300px] w-[600px] h-[600px] rounded-full bg-gradient-to-br from-blue-100/30 to-purple-100/30 blur-3xl -z-10 animate-blob-slow"></div>
-      <div className="absolute top-[400px] left-[-200px] w-[500px] h-[500px] rounded-full bg-gradient-to-tr from-pink-100/20 to-blue-100/20 blur-3xl -z-10 animate-blob"></div>
-      <div className="absolute bottom-[-300px] right-[10%] w-[600px] h-[600px] rounded-full bg-gradient-to-r from-blue-100/30 to-purple-100/30 blur-3xl -z-10 animate-blob-delayed"></div>
+      {/* Fancy Animated Background */}
+      <AnimatedBackground />
       
       <div className="container mx-auto px-4 py-8 lg:py-12 max-w-7xl">
         <div className="flex flex-col lg:flex-row lg:items-start lg:gap-10">

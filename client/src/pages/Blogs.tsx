@@ -3,11 +3,13 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Clock, Calendar, ExternalLink } from 'lucide-react';
 import { Link } from 'wouter';
+import AnimatedBackground from "@/components/AnimatedBackground";
 import { blogPosts } from '@/data/blogPosts';
 
 export default function Blogs() {
   return (
     <div className="min-h-screen font-sans text-foreground">
+      <AnimatedBackground />
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <div className="mb-10 flex items-center">
           <Link to="/">
